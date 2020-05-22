@@ -345,6 +345,7 @@ int uwsgi_buffer_append_base64(struct uwsgi_buffer *ub, char *s, size_t len) {
 
 
 void uwsgi_buffer_destroy(struct uwsgi_buffer *ub) {
+	if(ub == NULL)return;
 #ifdef UWSGI_DEBUG_BUFFER
 	uwsgi_log("[uwsgi-buffer] destroying buffer of %llu bytes\n", (unsigned long long) ub->len);
 	if (ub->freed) {

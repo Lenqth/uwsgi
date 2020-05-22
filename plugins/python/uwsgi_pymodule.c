@@ -1240,8 +1240,15 @@ PyObject *py_uwsgi_websocket_recv(PyObject * self, PyObject * args, PyObject * k
 	if (!ub) {
 		return PyErr_Format(PyExc_IOError, "unable to receive websocket message");
 	}
-
-	PyObject *ret = PyString_FromStringAndSize(ub->buf, ub->pos);
+	PyObject *ret;
+	if (ub->opcode == 1) { 
+		ret = PyUnicode_FromStringAndSize(ub->buf, ub->pos);
+	} else if (ub->opcode == 0){
+        Py_INCREF(Py_None);
+		ret = Py_None;
+	} else { 
+		ret = PyString_FromStringAndSize(ub->buf, ub->pos);
+	}
 	uwsgi_buffer_destroy(ub);
 	return ret;
 }
@@ -1274,7 +1281,15 @@ PyObject *py_uwsgi_websocket_recv_nb(PyObject * self, PyObject * args, PyObject 
                 return PyErr_Format(PyExc_IOError, "unable to receive websocket message");
         }
 
-        PyObject *ret = PyString_FromStringAndSize(ub->buf, ub->pos);
+		PyObject *ret;
+		if (ub->opcode == 1) {
+			ret = PyUnicode_FromStringAndSize(ub->buf, ub->pos);
+		} else if (ub->opcode == 0){
+	        Py_INCREF(Py_None);
+			ret = Py_None;
+		} else {
+			ret = PyString_FromStringAndSize(ub->buf, ub->pos);
+		}
         uwsgi_buffer_destroy(ub);
         return ret;
 }

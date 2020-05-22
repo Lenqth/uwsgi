@@ -124,6 +124,9 @@ struct uwsgi_plugin {
 struct uwsgi_buffer {
         char *buf;
         size_t pos;
+        size_t len;
+        size_t limit;
+        uint8_t opcode;
         ...;
 };
 
@@ -904,6 +907,9 @@ def uwsgi_pypy_websocket_recv():
     if ub == ffi.NULL:
         raise IOError("unable to receive websocket message")
     ret = ffi.buffer(ub.buf, ub.pos)[:]
+    op = int(ub.opcode)
+    if op == 1:
+        ret = ret.decode()
     lib.uwsgi_buffer_destroy(ub)
     return ret
 uwsgi.websocket_recv = uwsgi_pypy_websocket_recv
@@ -918,6 +924,9 @@ def uwsgi_pypy_websocket_recv_nb():
     if ub == ffi.NULL:
         raise IOError("unable to receive websocket message")
     ret = ffi.buffer(ub.buf, ub.pos)[:]
+    op = int(ub.opcode)
+    if op == 1:
+        ret = ret.decode()
     lib.uwsgi_buffer_destroy(ub)
     return ret
 uwsgi.websocket_recv_nb = uwsgi_pypy_websocket_recv_nb
