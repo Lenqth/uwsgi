@@ -76,17 +76,17 @@ def post_build(config):
         os._exit(1)
     if os.system("cd %s/plugins/jvm ; jar cvf uwsgi.jar *.class" % os.getcwd()) != 0:
         os._exit(1)
-    print("*** uwsgi.jar available in %s/plugins/jvm/uwsgi.jar ***" % os.getcwd())
+    print(("*** uwsgi.jar available in %s/plugins/jvm/uwsgi.jar ***" % os.getcwd()))
 
     env = os.environ.get('VIRTUAL_ENV')
     if env:
         src = "%s/plugins/jvm/uwsgi.jar" % os.getcwd()
         tgt = "%s/lib/uwsgi.jar" % env
         shutil.copyfile(src, tgt)
-        print("*** uwsgi.jar had been copied to %s" % tgt)
+        print(("*** uwsgi.jar had been copied to %s" % tgt))
 
         plugin = "%s/jvm_plugin.so" % os.getcwd()
         if os.path.exists(plugin):
             tgt = "%s/bin/jvm_plugin.so" % env
             shutil.copyfile(plugin, tgt)
-            print("*** jvm_plugin.so had been copied to %s" % tgt)
+            print(("*** jvm_plugin.so had been copied to %s" % tgt))

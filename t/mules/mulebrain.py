@@ -3,13 +3,13 @@ import time
 import uwsgi
 import os
 
-print(uwsgi.opt)
+print((uwsgi.opt))
 
 sig_timeout = uwsgi.opt.get('test_mule_timeout', 10)
 sig_to_send = uwsgi.opt.get('test_signal', signal.SIGINT)
 
 def sig_handler(signum, frame):
-    print('Hello from signal', signum)
+    print(('Hello from signal', signum))
     time.sleep(int(sig_timeout))
     sys.exit(0)
 

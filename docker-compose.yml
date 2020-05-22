@@ -1,0 +1,10 @@
+version: '2'
+
+
+services:
+  uwsgi-test:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: uwsgi-test
+    container_name: "uwsgi-test"

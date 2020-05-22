@@ -4,14 +4,14 @@ import gc
 import sys
 from uwsgidecorators import rpc, signal, postfork
 
-print(sys.version)
-print(sys.version_info)
+print((sys.version))
+print((sys.version_info))
 if 'set_debug' in gc.__dict__:
     gc.set_debug(gc.DEBUG_SAVEALL)
 
-print(os.environ)
-print(sys.modules)
-print(sys.argv)
+print((os.environ))
+print((sys.modules))
+print((sys.argv))
 
 try:
     DEBUG = sys.argv[1] == 'debug'
@@ -52,7 +52,7 @@ def serve_logo(e, sr):
 
 def serve_config(e, sr):
     sr('200 OK', [('Content-Type', 'text/html')])
-    for opt in uwsgi.opt.keys():
+    for opt in list(uwsgi.opt.keys()):
         yield "<b>%s</b> = %s<br/>" % (opt, uwsgi.opt[opt])
 
 routes = {}
@@ -82,13 +82,13 @@ def application(env, start_response):
     except Exception:
         pass
     if DEBUG:
-        print(env['wsgi.input'].fileno())
+        print((env['wsgi.input'].fileno()))
 
     if env['PATH_INFO'] in routes:
         return routes[env['PATH_INFO']](env, start_response)
 
     if DEBUG:
-        print(env['wsgi.input'].fileno())
+        print((env['wsgi.input'].fileno()))
 
     try:
         gc.collect(2)
@@ -96,7 +96,7 @@ def application(env, start_response):
         pass
 
     if DEBUG:
-        print(len(gc.get_objects()))
+        print((len(gc.get_objects())))
 
     workers = ''
     for w in uwsgi.workers():

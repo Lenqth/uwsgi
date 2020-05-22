@@ -3,7 +3,7 @@ import uwsgi
 
 
 def spooler_func(env):
-    print(uwsgi.spooler_dir())
+    print((uwsgi.spooler_dir()))
     return uwsgi.SPOOL_RETRY
 
 uwsgi.spooler = spooler_func

@@ -27,7 +27,7 @@ def application(env, start_response):
 
     start_response('200 Ok', [('Content-type', 'text/html')])
 
-    conn = psycopg2.connect("dbname=template1 user=postgres", async=True)
+    conn = psycopg2.connect("dbname=template1 user=postgres", async_=True)
 
     # suspend until connection
     async_wait(conn)

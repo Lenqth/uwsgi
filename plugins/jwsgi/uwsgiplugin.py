@@ -4,7 +4,7 @@ jvm_path = 'plugins/jvm'
 
 up = {}
 try:
-    execfile('%s/uwsgiplugin.py' % jvm_path, up)
+    exec(compile(open('%s/uwsgiplugin.py' % jvm_path, "rb").read(), '%s/uwsgiplugin.py' % jvm_path, 'exec'), up)
 except Exception:
     f = open('%s/uwsgiplugin.py' % jvm_path)
     exec(f.read(), up)

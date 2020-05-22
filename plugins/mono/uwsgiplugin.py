@@ -16,4 +16,4 @@ def post_build(config):
         os._exit(1)
     if os.system("mcs /target:library /r:System.Configuration.dll /r:System.Web.dll /keyfile:plugins/mono/uwsgi.key plugins/mono/uwsgi.cs") != 0:
         os._exit(1)
-    print("*** uwsgi.dll available in %s/plugins/mono/uwsgi.dll ***" % os.getcwd())
+    print(("*** uwsgi.dll available in %s/plugins/mono/uwsgi.dll ***" % os.getcwd()))

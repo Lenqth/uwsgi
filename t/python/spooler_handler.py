@@ -1,7 +1,7 @@
 #! /usr/bin/env python2
 # coding = utf-8
 
-from __future__ import print_function
+
 from constants import tasks, LOGFILE
 from os import remove
 import uwsgi
@@ -29,6 +29,6 @@ uwsgi.spooler = spoolerHandler
 # Clear the logfile
 try:
     remove(LOGFILE)
-except OSError, e:  # log does not exist
+except OSError as e:  # log does not exist
     pass
     # print(e)

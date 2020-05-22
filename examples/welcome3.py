@@ -14,7 +14,7 @@ def serve_logo(e, sr):
 
 def serve_config(e, sr):
     sr('200 OK', [('Content-Type', 'text/html')])
-    for opt in uwsgi.opt.keys():
+    for opt in list(uwsgi.opt.keys()):
         body = "{opt} = {optvalue}<br/>".format(opt=opt, optvalue=uwsgi.opt[opt].decode('ascii'))
         yield bytes(body.encode('ascii'))
 

@@ -19,7 +19,7 @@ class testthread(Thread):
     def run(self):
         while 1:
             time.sleep(2)
-            print "i am a terrible python thread of the uWSGI master process", uwsgi.applications
+            print("i am a terrible python thread of the uWSGI master process", uwsgi.applications)
 
 
 tthread = testthread()
@@ -39,7 +39,7 @@ def mako(filename, vars):
 
 
 def myspooler(env):
-    print env
+    print(env)
     for i in range(1, 100):
         uwsgi.sharedarea_inclong(100)
         # time.sleep(1)
@@ -62,7 +62,7 @@ def force_harakiri():
 
 
 def application(env, start_response):
-    print env
+    print(env)
     start_response('200 OK', [('Content-Type', 'text/plain')])
     yield {
         '/': helloworld,
@@ -71,7 +71,7 @@ def application(env, start_response):
         '/uwsgi/': helloworld
     }[env['PATH_INFO']]()
 
-    print env
+    print(env)
 
 
 def gomako():
@@ -94,9 +94,9 @@ def djangohomepage():
     uwsgi.start_response('200 OK', [('Content-Type', 'text/html')])
     t = Template("My name is {{ my_name }}.")
     c = Context({"my_name": "Serena"})
-    print t, c
+    print(t, c)
     a = t.render(c)
-    print "ciao", a
+    print("ciao", a)
     yield str(a)
 
 
@@ -157,7 +157,7 @@ def reload(env, start_response):
         #print w['running_time']
         if w is not None:
             yield '<tr><td>' + str(w['id']) + '</td><td>' + str(w['pid']) + '</td><td>' + str(w['pid']) + '</td><td>' + str(w['requests']) + '</td><td>' + str(w['running_time']) + '</td><td>' + str(w['vsz']) + '</td><td>' + str(w['rss']) + '</td></tr>'
-            print w
+            print(w)
 
     yield '</table>'
 
@@ -174,9 +174,9 @@ def remotemako(env, start_response):
         ('192.168.173.5', 3434, [9001, 12000]),
         ('192.168.173.5', 3435, [12001, 15000])
     )
-    print clusters
+    print(clusters)
     all_values = uwsgi.send_multi_uwsgi_message(clusters, 33, 17, 40)
-    print all_values
+    print(all_values)
     return mako('makotest.txt', {
         'whattimeisit': time.time(),
         'roberta': 'serena',
@@ -196,5 +196,5 @@ uwsgi.applications = {
     '/pippo': reload
 }
 
-print uwsgi.applications
-print uwsgi.applist
+print(uwsgi.applications)
+print(uwsgi.applist)

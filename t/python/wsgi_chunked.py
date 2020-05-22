@@ -12,5 +12,5 @@ def application(environ, start_response):
     print(data)
     data = environ['wsgi.input'].read(6)
     print(data)
-    print(environ['wsgi.input'].read())
+    print((environ['wsgi.input'].read()))
     return [data]

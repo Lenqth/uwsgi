@@ -1,5 +1,5 @@
 from uwsgidecorators import spool
-import Queue
+import queue
 from threading import Thread
 
 queues = {}
@@ -10,7 +10,7 @@ class queueconsumer(object):
     def __init__(self, name, num=1, **kwargs):
         self.name = name
         self.num = num
-        self.queue = Queue.Queue()
+        self.queue = queue.Queue()
         self.threads = []
         self.func = None
         queues[self.name] = self
@@ -19,7 +19,7 @@ class queueconsumer(object):
     def consumer(self):
         while True:
             req = self.queue.get()
-            print req
+            print(req)
             self.func(req)
             self.queue.task_done()
 

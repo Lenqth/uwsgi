@@ -1,4 +1,4 @@
-import Queue
+import queue
 from threading import Thread
 import uwsgi
 
@@ -15,12 +15,12 @@ def consumer(q):
 
 def spawn_consumers():
     global q
-    q = Queue.Queue()
+    q = queue.Queue()
     for i in range(CONSUMERS):
         t = Thread(target=consumer, args=(q,))
         t.daemon = True
         t.start()
-        print("consumer %d on worker %d started" % (i, uwsgi.worker_id()))
+        print(("consumer %d on worker %d started" % (i, uwsgi.worker_id())))
 
 
 uwsgi.post_fork_hook = spawn_consumers

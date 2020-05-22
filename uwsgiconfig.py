@@ -10,6 +10,11 @@ uwsgi_os_k = re.split('[-+_]', os.uname()[2])[0]
 uwsgi_os_v = os.uname()[3]
 uwsgi_cpu = os.uname()[4]
 
+if isinstance(__builtins__,dict):
+    _compile = __builtins__["compile"]
+else:                
+    _compile = __builtins__.compile
+
 import sys
 import subprocess
 from threading import Thread, Lock
@@ -18,12 +23,12 @@ from optparse import OptionParser
 try:
     from queue import Queue
 except ImportError:
-    from Queue import Queue
+    from queue import Queue
 
 from distutils import sysconfig
 
 try:
-    import ConfigParser
+    import configparser
 except ImportError:
     import configparser as ConfigParser
 
@@ -274,7 +279,7 @@ def compile(cflags, last_cflags_ts, objfile, srcfile):
             profile_stat = os.stat('buildconf/%s' % profile)
             if object_stat[8] <= profile_stat[8]:
                 raise
-        print("%s is up to date" % objfile)
+        print(("%s is up to date" % objfile))
         return
     except Exception:
         pass
@@ -330,14 +335,14 @@ def build_uwsgi(uc, print_only=False, gcll=None):
         cflags.append(eplc)
 
     if print_only:
-        print(' '.join(cflags))
+        print((' '.join(cflags)))
         sys.exit(0)
 
     if 'APPEND_CFLAGS' in os.environ:
         cflags += os.environ['APPEND_CFLAGS'].split()
 
-    print("detected CPU cores: %d" % CPUCOUNT)
-    print("configured CFLAGS: %s" % ' '.join(cflags))
+    print(("detected CPU cores: %d" % CPUCOUNT))
+    print(("configured CFLAGS: %s" % ' '.join(cflags)))
 
     if sys.version_info[0] >= 3:
         import binascii
@@ -590,18 +595,18 @@ def build_uwsgi(uc, print_only=False, gcll=None):
     print("################# uWSGI configuration #################")
     print("")
     for report_key in report:
-        print("%s = %s" % (report_key, report[report_key]))
+        print(("%s = %s" % (report_key, report[report_key])))
     print("")
     print("############## end of uWSGI configuration #############")
 
-    print("total build time: %d seconds" % (time.time() - started_at))
+    print(("total build time: %d seconds" % (time.time() - started_at)))
 
     if bin_name.find("/") < 0:
         bin_name = './' + bin_name
     if uc.get('as_shared_library'):
-        print("*** uWSGI shared library (%s) is ready, move it to a library directory ***" % bin_name)
+        print(("*** uWSGI shared library (%s) is ready, move it to a library directory ***" % bin_name))
     else:
-        print("*** uWSGI is ready, launch it with %s ***" % bin_name)
+        print(("*** uWSGI is ready, launch it with %s ***" % bin_name))
 
     for pb in post_build:
         pb(uc)
@@ -611,7 +616,7 @@ def open_profile(filename):
     if filename.startswith('http://') or filename.startswith('https://') or filename.startswith('ftp://'):
         wrapped = False
         try:
-            import urllib2
+            import urllib.request, urllib.error, urllib.parse
         except ImportError:
             import urllib.request
             wrapped = True
@@ -619,7 +624,7 @@ def open_profile(filename):
         if wrapped:
             import io
             return io.TextIOWrapper(urllib.request.urlopen(filename), encoding='utf-8')
-        return urllib2.urlopen(filename)
+        return urllib.request.urlopen(filename)
     return open(filename)
 
 
@@ -629,9 +634,9 @@ class uConf(object):
         global GCC
 
         self.filename = filename
-        self.config = ConfigParser.ConfigParser()
+        self.config = configparser.ConfigParser()
         if not mute:
-            print("using profile: %s" % filename)
+            print(("using profile: %s" % filename))
 
         if os.path.exists('uwsgibuild.lastprofile'):
             ulp = open('uwsgibuild.lastprofile')
@@ -747,7 +752,7 @@ class uConf(object):
                     pass
 
         if not mute:
-            print("detected include path: %s" % self.include_path)
+            print(("detected include path: %s" % self.include_path))
 
         try:
             gcc_version_components = gcc_version.split('.')
@@ -787,7 +792,7 @@ class uConf(object):
             interpolations = {}
             for option in self.config.options('uwsgi'):
                 interpolations[option] = self.get(option, default='')
-            iconfig = ConfigParser.ConfigParser(interpolations)
+            iconfig = configparser.ConfigParser(interpolations)
             if hasattr(self.config, 'read_file'):
                 iconfig.read_file(open_profile(inherit))
             else:
@@ -819,7 +824,7 @@ class uConf(object):
     def depends_on(self, what, dep):
         for d in dep:
             if not self.get(d):
-                print("%s needs %s support." % (what, d))
+                print(("%s needs %s support." % (what, d)))
                 sys.exit(1)
 
     def has_include(self, what):
@@ -1395,7 +1400,7 @@ try:
 except NameError:
     def execfile(path, up):
         with open(path) as py:
-            code = __builtins__.compile(py.read(), path, 'exec')
+            code = _compile(py.read(), path, 'exec')
         exec(code, up)
 
 
@@ -1410,9 +1415,9 @@ def get_plugin_up(path):
         if not path:
             path = '.'
     elif os.path.isdir(path):
-        execfile('%s/uwsgiplugin.py' % path, up)
+        exec(_compile(open('%s/uwsgiplugin.py' % path, "rb").read(), '%s/uwsgiplugin.py' % path, 'exec'), up)
     else:
-        print("Error: unable to find directory '%s'" % path)
+        print(("Error: unable to find directory '%s'" % path))
         sys.exit(1)
 
     if 'CFLAGS' not in up:
@@ -1568,7 +1573,7 @@ def build_plugin(path, uc, cflags, ldflags, libs, name=None):
 
     ret = os.system(gccline)
     if ret != 0:
-        print("*** unable to build %s plugin ***" % name)
+        print(("*** unable to build %s plugin ***" % name))
         sys.exit(1)
 
     try:
@@ -1587,8 +1592,8 @@ def build_plugin(path, uc, cflags, ldflags, libs, name=None):
     if post_build:
         post_build(uc)
 
-    print("build time: %d seconds" % (time.time() - plugin_started_at))
-    print("*** %s plugin built and available in %s ***" % (name, plugin_dest + '.so'))
+    print(("build time: %d seconds" % (time.time() - plugin_started_at)))
+    print(("*** %s plugin built and available in %s ***" % (name, plugin_dest + '.so')))
 
 
 def vararg_callback(option, opt_str, value, parser):
@@ -1677,10 +1682,10 @@ if __name__ == "__main__":
             name = options.plugin[2]
         except Exception:
             name = None
-        print("*** uWSGI building and linking plugin %s ***" % options.plugin[0])
+        print(("*** uWSGI building and linking plugin %s ***" % options.plugin[0]))
         build_plugin(options.plugin[0], uc, cflags, ldflags, libs, name)
     elif options.extra_plugin:
-        print("*** uWSGI building and linking plugin from %s ***" % options.extra_plugin[0])
+        print(("*** uWSGI building and linking plugin from %s ***" % options.extra_plugin[0]))
         cflags = os.environ['UWSGI_PLUGINS_BUILDER_CFLAGS'].split() + os.environ.get("CFLAGS", "").split()
         cflags.append('-I.uwsgi_plugins_builder/')
         ldflags = os.environ.get("LDFLAGS", "").split()

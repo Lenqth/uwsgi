@@ -15,7 +15,7 @@ def application(env, start_response):
         'Hello': 'World',
         'I am a': 'long running task'
     })
-    print("spooled as %s" % name)
+    print(("spooled as %s" % name))
 
     start_response('200 Ok', [
         ('Content-Type', 'text/plain'),

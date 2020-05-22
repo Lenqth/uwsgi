@@ -365,7 +365,7 @@ def uwsgi_pypy_pythonpath(item):
     """
     path = ffi.string(item)
     sys.path.append(path)
-    print("added %s to pythonpath" % path)
+    print(("added %s to pythonpath" % path))
 
 
 class WSGIfilewrapper(object):
@@ -1008,8 +1008,8 @@ def uwsgi_pypy_set_logvar(key, val):
 uwsgi.set_logvar = uwsgi_pypy_set_logvar
 
 
-print("Initialized PyPy with Python %s" % sys.version)
-print("PyPy Home: %s" % sys.prefix)
+print(("Initialized PyPy with Python %s" % sys.version))
+print(("PyPy Home: %s" % sys.prefix))
 
 
 """

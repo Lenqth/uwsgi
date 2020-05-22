@@ -1,7 +1,7 @@
 import uwsgi
 import os
 
-print("!!! uWSGI version:", uwsgi.version)
+print(("!!! uWSGI version:", uwsgi.version))
 
 
 def ciao():
@@ -10,7 +10,7 @@ def ciao():
 
 def ciao2():
     print("nuovo uwsgi_server")
-    print os.getpid()
+    print(os.getpid())
 
 counter = 0
 

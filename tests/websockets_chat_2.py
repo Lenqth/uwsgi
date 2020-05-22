@@ -57,12 +57,12 @@ class Client(object):
 
 
     def on_data(self, data):
-        print "GOT: {0}".format(data)
+        print("GOT: {0}".format(data))
         ClientManager.broadcast(data)
 
 
     def on_exit(self):
-        print "bye bye..."
+        print("bye bye...")
 
 
     def send(self, data):
@@ -137,7 +137,7 @@ def application(env, sr):
     elif env['PATH_INFO'] == '/favicon.ico':
         return ""
     elif env['PATH_INFO'] == '/foobar/':
-        print "websockets..."
+        print("websockets...")
         client = Client()
         client.start()
 

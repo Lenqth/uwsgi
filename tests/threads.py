@@ -14,7 +14,7 @@ def monitor2():
     while 1:
         time.sleep(2)
         print("i am the monitor 2")
-        print(sys.modules)
+        print((sys.modules))
 
 
 def monitor3():

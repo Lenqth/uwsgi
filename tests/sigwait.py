@@ -4,7 +4,7 @@ from uwsgidecorators import *
 
 @signal(17, target='workers')
 def hello(signum):
-    print("I AM THE WORKER %d" % uwsgi.worker_id())
+    print(("I AM THE WORKER %d" % uwsgi.worker_id()))
 
 
 @signal(30, target='worker2')
@@ -17,7 +17,7 @@ def wait_for_signal():
     if uwsgi.worker_id() != 2:
         print("waiting for a signal...")
         uwsgi.signal_wait()
-        print("signal %d received" % uwsgi.signal_received())
+        print(("signal %d received" % uwsgi.signal_received()))
 
 
 def application(e, s):

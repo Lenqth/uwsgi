@@ -7,7 +7,7 @@ jvm_path = 'plugins/jvm'
 
 up = {}
 try:
-    execfile('%s/uwsgiplugin.py' % jvm_path, up)
+    exec(compile(open('%s/uwsgiplugin.py' % jvm_path, "rb").read(), '%s/uwsgiplugin.py' % jvm_path, 'exec'), up)
 except Exception:
     f = open('%s/uwsgiplugin.py' % jvm_path)
     exec(f.read(), up)
@@ -27,4 +27,4 @@ def post_build(config):
         if os.path.exists(plugin):
             tgt = "%s/bin/ring_plugin.so" % env
             shutil.copyfile(plugin, tgt)
-            print("*** ring_plugin.so had been copied to %s" % tgt)
+            print(("*** ring_plugin.so had been copied to %s" % tgt))
