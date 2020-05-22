@@ -2931,8 +2931,6 @@ struct uwsgi_server {
 	size_t environ_len;
 
 	int dynamic_apps;
-
-	struct uwsgi_buffer *websockets_continuation_buffer;
 };
 
 struct uwsgi_rpc {
