@@ -391,6 +391,7 @@ struct uwsgi_buffer {
 	size_t pos;
 	size_t len;
 	size_t limit;
+	uint8_t opcode;
 #ifdef UWSGI_DEBUG_BUFFER
 	int freed;
 #endif
@@ -1571,6 +1572,7 @@ struct wsgi_request {
 
 	struct uwsgi_buffer *websocket_buf;
 	struct uwsgi_buffer *websocket_send_buf;
+	struct uwsgi_buffer *websockets_continuation_buffer;
 	size_t websocket_need;
 	int websocket_phase;
 	uint8_t websocket_opcode;

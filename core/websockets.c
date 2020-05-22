@@ -172,6 +172,7 @@ static struct uwsgi_buffer *uwsgi_websockets_parse(struct wsgi_request *wsgi_req
 	}
 	else {
 		ub = uwsgi_buffer_new(wsgi_req->websocket_size);
+		ub->opcode = wsgi_req->websocket_opcode;
 	}
 	if (uwsgi_buffer_append(ub, (char *) ptr, wsgi_req->websocket_size)) goto error;	
 	if (uwsgi_buffer_decapitate(wsgi_req->websocket_buf, wsgi_req->websocket_pktsize)) goto error;
@@ -186,6 +187,7 @@ static struct uwsgi_buffer *uwsgi_websockets_parse(struct wsgi_request *wsgi_req
 	uwsgi.websockets_continuation_buffer = ub;
 	/// Message is not complete, send empty dummy buffer to signal waiting for full message
 	ub = uwsgi_buffer_new(1);
+	ub->opcode = 0;
 	uwsgi_buffer_append(ub, "\0", 1);
 	return ub;
 error:
