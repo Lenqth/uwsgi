@@ -361,6 +361,10 @@ end:
                 int i = 0;
                 struct uwsgi_socket *uwsgi_sock = uwsgi.sockets;
                 for (; uwsgi_sock; uwsgi_sock = uwsgi_sock->next, ++i) {
+						if(!PyObject_HasAttrString(ugevent.watchers[i], "active")){
+							start_watcher(i, uwsgi_sock);
+							continue;
+						}
                         PyObject *py_watcher_active = PyObject_GetAttrString(ugevent.watchers[i], "active");
                         if (py_watcher_active && PyBool_Check(py_watcher_active) &&
                             !PyInt_AsLong(py_watcher_active)) {
